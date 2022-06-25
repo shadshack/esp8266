@@ -8,7 +8,7 @@
 // #include "wpa2_enterprise.h"  // Include the wpa2_enterprise library // need to figure this one out...
 
 // Set DNS name here
-const char* dns_name = "wifi-test";              // The DNS name to use for the mDNS responder
+String hostname = "wifi-test";              // The DNS name to use for the mDNS responder
 
 // Wifi with PSK
 const char* ssid     = "SSID HERE";    // The SSID (name) of the Wi-Fi network you want to connect to
@@ -27,6 +27,8 @@ void setup() {
   delay(10);
   Serial.println('\n');
   
+  WiFi.hostname(hostname.c_str()); // set the hostname
+
   WiFi.begin(ssid, password);             // Connect to the network
   Serial.print("Connecting to ");
   Serial.print(ssid); Serial.println(" ...");
@@ -42,10 +44,12 @@ void setup() {
   Serial.println(WiFi.SSID());      
   Serial.print("IP address:\t");
   Serial.println(WiFi.localIP());         // Send the IP address of the ESP8266 to the computer
+  Serial.print("MAC:\t");
+  Serial.println(WiFi.macAddress());
 
   // Start the mDNS responder for the ESP8266
-  if (MDNS.begin(dns_name)) {             // Start the mDNS responder for esp8266.local
-    Serial.print("mDNS responder started. Ping at:\t"); Serial.print(dns_name); Serial.print(".local");
+  if (MDNS.begin(hostname)) {             // Start the mDNS responder for esp8266.local
+    Serial.print("mDNS responder started. Ping at:\t"); Serial.print(hostname); Serial.print(".local");
   }
   else {
     Serial.println("Error setting up MDNS responder!");
